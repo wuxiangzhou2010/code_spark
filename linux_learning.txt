@@ -1,0 +1,92 @@
+线程同步 
+
+
+pthread_exit
+pthread_cancel
+pthread_setschedprio
+
+锁
+pthread_mutex_init, pthread_mutex_destroy pthread_mutex_lock(), pthread_mutex_unlock(), pthread_mutex_setprioceiling(), pthread_mutex_trylock(),
+ 
+ pthread_mutex_trylock
+
+ int pthread_cond_destroy(pthread_cond_t *cond);
+int pthread_cond_init(pthread_cond_t *restrict cond,
+       const pthread_condattr_t *restrict attr);
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER; [Option End]
+ 
+pthread_setname_np, pthread_getname_np - set/get the name of a thread
+length is restricted to 16 characters,
+       including the terminating null byte ('\0')
+
+pthread_mutexattr_init pthread_mutexattr_setpshared pthread_mutexattr_destroy pthread_mutexattr_setprioceiling
+	   
+
+	   
+	   
+线程属性   
+	   
+	   
+	   pthread_attr_init, pthread_attr_destroy - initialize and destroy thread attributes object
+	   pthread_attr_getstack pthread_attr_getguardsize pthread_attr_getschedparam pthread_attr_getschedpolicy  pthread_attr_getinheritsched pthread_attr_getscope	   pthread_attr_getdetachstate
+	   
+	   and set  pthread_attr_setstack pthread_attr_setguardsize pthread_attr_setschedparam pthread_attr_setschedpolicy  pthread_attr_setinheritsched pthread_attr_setscope	   pthread_attr_setdetachstate
+	   
+信号量
+	   
+	   sem_init
+	   sem_wait
+	   sem_trywait
+	   sem_timedwait
+	   sem_getvalue
+	   sem_post
+	   sem_destroy
+	   
+	   
+文件操作：
+
+fclose fopen  fflush
+
+字符串 内存操作
+strchr
+sscanf sprintf strcpy
+
+memcpy memcmp memset 
+
+时间：
+
+time_t 
+struct tm
+asctime
+sleep usleep 
+nanosleep
+clock_nanosleep CLOCK_REALTIME CLOCK_MONOTONIC CLOCK_PROCESS_CPUTIME_ID
+clock_gettime Link with -lrt.
+
+---------------------------------------------------------------
+
+http://blog.chinaunix.net/uid-26758209-id-3106265.html
+与或非
+
+ 按位与运算有一些特殊的用途如下：
+       1、清零。
+       如果想将一个单元清零，即使其全部二进制位为0，只要找一个二进制数，其中各个位符合下面的条件：原来数中为1的位置，新数中相应的位为0，然后使二者进行与运算，既可以达到清零的母的。
+       2、取一个数中某些指定的位。只要将要取的某些位与1相与，就可以得到想要取得位的值。
+       3、将某一位留下来。要想将某一位留下来，就与一个数进行与运算，次数在该位取1。这一点在嵌入式开发中应用的比较广泛。例如，在点亮一个LED灯的时候，通过控制与之相连的处理器的IO口，取1或者取0 就可以控制LED灯的亮和灭。
+     我印象中异或运算的一个比较有意思的应用是交换两个值，不使用中间变量。
+左移运算符(<<)
+       用来将一个数的各二进制位全部左移若干位。高位左移溢出后就舍弃。左移1 位相当于该数乘以2，左移两位就相当于乘以2的平方，依次类推，左移多少位就相当于该数乘以2的多少次方，但是此结论只适用于该数左移时被溢出舍弃的高位中不含1的情况。
+右移运算符(>>)
+       用于将一个数的各二进制位全部右移若干位，移到右端的低位被舍弃，对去符号数，高位补0.右移以为相当于除以2，右移n位相当于除以2的n次方。在右移的过程中，需要注意符号位的问题。对于无符号数，右移时左边高位补0，对于有符号的值，如果原来符号位为0，则左边也是一如0；如果符号位为1，，则左边移入的是1还是0，要取决于所用的计算机系统。移入0的称为“逻辑右移”，移入1的称为“算术右移”。
+补充知识：位段
+       位段以位为单位定义的结构体中成员所占用存储空间的长度，含有位段的结构体类型称为位段结构。位段结构也是一种结构体类型，只不过其中含有以位为单位定义存储长度的整数类型位段成员。采用位段结构既节省存储空间，又可方便操作。
+       位段结构中位段的定义格式为： unsigned  <成员名> : <二进制位数>   
+  关于位段数据，注意以下几点：
+       （1）一个位段必须存储在同一存储单元（即字）之中，不能跨两个单元。如果其单元空间不够，则剩余空间不用，从下一个单元起存放该位段。
+       （2）可以通过定义长度为0的位段的方式使下一位段从下一存储单元开始。
+       （3）可以定义无名位段。
+       （4）位段的长度不能大于存储单元的长度。
+       （5）位段无地址，不能对位段进行取地址运算。
+       （6）位段可以以%d，%o，%x格式输出。
+       （7）位段若出现在表达式中，将被系统自动转换成整数。
+    结构体大小原则：由于存储变量时地址对齐的要求，编译器在编译程序时会遵循两条原则：第一、结构体变量中成员的偏移量必须是成员大小的整数倍（0被认为是任何数的整数倍）。第二、结构体大小必须是所有成员大小的整数倍。
