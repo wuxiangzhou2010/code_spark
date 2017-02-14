@@ -42,6 +42,10 @@ pthread_mutexattr_init pthread_mutexattr_setpshared pthread_mutexattr_destroy pt
 	   sem_post
 	   sem_destroy
 	   
+SIGSTOP/SIGKILL这俩信号无法捕获和忽略
+	   signal
+	   sigaction
+	   
 	   
 文件操作：
 
@@ -62,6 +66,12 @@ sleep usleep
 nanosleep
 clock_nanosleep CLOCK_REALTIME CLOCK_MONOTONIC CLOCK_PROCESS_CPUTIME_ID
 clock_gettime Link with -lrt.
+
+---->
+The advantages of clock_nanosleep over nanosleep are:
+
+You can specify an absolute time to sleep until rather than an interval to sleep. This makes a difference for the realtime (wall time) clock, which can be reset by the administrator or ntpd, etc. With nanosleep and precalculating the interval to sleep to reach a given absolute time, you'll fail to wake if the clock is reset and the desired time arrives "early". Also, there's a race condition with scheduling using interval times: If you compute the interval you want to sleep, but you get preempted before calling nanosleep and don't get scheduled again for a while, you'll again sleep too long.
+You can sleep on timers other than the realtime clock. The most useful is usually the monotonic clock (which can't be reset and increases monotonically with the progression of actual time), but there are also other interesting applications like having one thread in a multi-threaded process sleep on the process's cpu time clock (so it wakes after the process has used a given amount of cpu time).
 
 ---------------------------------------------------------------
 
@@ -90,3 +100,14 @@ http://blog.chinaunix.net/uid-26758209-id-3106265.html
        （6）位段可以以%d，%o，%x格式输出。
        （7）位段若出现在表达式中，将被系统自动转换成整数。
     结构体大小原则：由于存储变量时地址对齐的要求，编译器在编译程序时会遵循两条原则：第一、结构体变量中成员的偏移量必须是成员大小的整数倍（0被认为是任何数的整数倍）。第二、结构体大小必须是所有成员大小的整数倍。
+
+---------------------------------------------------------------	
+int argc 代表输入参数的个数，英文全名arguments count，以空格来计数，程序名（*.exe）是为第一个参数。
+char *argv[]以字符数组的方式储存参数内容，英文全名arguments vector，argv[1]代表程序名。
+····
+可以看出将字符数组的内容转换为字符串是：
+string(argc[i]) == "--help"
+
+将字符数组的内容转化为 int 型 是：
+num = atoi(argc[++i]);
+····
