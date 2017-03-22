@@ -46,17 +46,13 @@ struct Node* create_list(void)
 		{
 			printf("Malloc failed\n"); 
 			free(head); /*if malloc failed, should free the already allocated memory*/
-
 		}
 		if(break_flag)
 			break;
 	}
-	if(head)
-		return head;
-	else
-		return NULL;
-
+	return head;
 }
+/* traverse the list */
 void print_list(struct Node * list)
 {
 	struct Node * temp =  list;
@@ -72,6 +68,7 @@ void print_list(struct Node * list)
 
 }
 
+/* delete the list */
 void free_list(struct Node *  head)
 {
 	struct Node * temp=NULL;
@@ -83,15 +80,54 @@ void free_list(struct Node *  head)
 		free(temp);
 	}
 }
+/** reverse  the list 
+** for old list: need to get the list one bye one ()
+** for the new list, the old list temp value should be stored after new list head 
+*/
+struct Node *reverse_list(struct Node *head)
+{
+	struct Node * temp_old = NULL;
+	struct Node *old_last = NULL;
+	struct Node *new = NULL;
+	struct Node *temp_new = NULL;
+	int first_flag = 1;
+	printf("reverse list\n");
+
+	old_last = head->next;
+	while(old_last)
+	{
+		/* for old list */
+		temp_old = old_last; 				/* get next value */
+		old_last= old_last->next; 		/* old head move to next */	
+		
+		/* for new list */
+		if(first_flag) 					/* if first, then new element's next is NULL */
+		{
+			new = (struct Node *)malloc(sizeof(struct Node)); /* get new list */
+			new->next = temp_old;
+			new->next->next = NULL;
+			first_flag =0;
+		}
+		else
+		{
+			temp_new = new->next;
+			new->next = temp_old;
+			new->next->next = temp_new;
+		}
+	}
+	return new;
+}
 
 int main(int argc, char const *argv[])
 {
 	struct  Node * list = NULL;
-	list = create_list();
+	list = create_list(); /* create single list */
 	if(list)
 	{
+		print_list(list); /* traverse single list */
+		list = reverse_list(list);
 		print_list(list);
-		free_list(list);
+		free_list(list);  /* delete single list */
 	}
 	return 0;
 }
