@@ -1,3 +1,11 @@
+/*
+ *
+ * It always padding to the largest member in the struct
+ * say short, then size is n * sizeof(short), 
+ * say long, then size id n * sizeof(long)
+ * */
+
+
 #include<stdio.h>
 
 
